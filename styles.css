@@ -1169,77 +1169,27 @@ body {
   gap: 1.25rem;
 }
 
-.signals-header-card {
-  background: linear-gradient(135deg, rgba(20, 27, 45, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  border-radius: var(--radius-lg);
-  padding: 1.4rem 1.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-}
-
-.badge-headline {
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #60a5fa;
-  background: rgba(59, 130, 246, 0.15);
-  padding: 3px 8px;
-  border-radius: var(--radius-sm);
-  display: inline-block;
-  margin-bottom: 0.35rem;
-}
-
-.signals-main-title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.25rem;
-}
-
-.signals-main-subtitle {
-  font-size: 0.82rem;
-  color: var(--text-secondary);
-  max-width: 680px;
-}
-
-.market-posture-badge {
-  background: var(--bg-card);
-  border: 1px solid var(--border-highlight);
-  padding: 0.75rem 1.25rem;
-  border-radius: var(--radius-md);
-  text-align: right;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.posture-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  letter-spacing: 0.05em;
-}
-
-.posture-value {
-  font-size: 1.05rem;
-  font-weight: 800;
-  font-family: 'JetBrains Mono', monospace;
-}
-.posture-value.green { color: var(--long-color); }
-.posture-value.red { color: var(--short-color); }
-.posture-value.yellow { color: var(--unwinding-color); }
-
 /* Signals Grid */
 .signals-columns-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.25rem;
+}
+
+.signals-columns-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1200px) {
+  .signals-columns-grid-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .signals-columns-grid-4 {
+    grid-template-columns: 1fr;
+  }
 }
 
 .signal-col {
@@ -1257,6 +1207,14 @@ body {
 
 .signal-col-sell {
   border-top: 3px solid var(--short-color);
+}
+
+.signal-col-covering {
+  border-top: 3px solid var(--covering-color);
+}
+
+.signal-col-unwinding {
+  border-top: 3px solid var(--unwinding-color);
 }
 
 .signal-col-header {
@@ -1281,6 +1239,8 @@ body {
 }
 .signal-indicator-dot.buy { background: var(--long-color); box-shadow: 0 0 10px var(--long-color); }
 .signal-indicator-dot.sell { background: var(--short-color); box-shadow: 0 0 10px var(--short-color); }
+.signal-indicator-dot.covering { background: var(--covering-color); box-shadow: 0 0 10px var(--covering-color); }
+.signal-indicator-dot.unwinding { background: var(--unwinding-color); box-shadow: 0 0 10px var(--unwinding-color); }
 
 .signal-col-title {
   font-size: 1.05rem;
@@ -1301,6 +1261,8 @@ body {
 }
 .signal-col-count.buy { background: var(--long-bg); color: var(--long-color); border: 1px solid var(--long-border); }
 .signal-col-count.sell { background: var(--short-bg); color: var(--short-color); border: 1px solid var(--short-border); }
+.signal-col-count.covering { background: var(--covering-bg); color: var(--covering-color); border: 1px solid var(--covering-border); }
+.signal-col-count.unwinding { background: var(--unwinding-bg); color: var(--unwinding-color); border: 1px solid var(--unwinding-border); }
 
 /* Signal Card List */
 .signals-card-list {
@@ -1364,6 +1326,8 @@ body {
 }
 .signal-action-pill.buy { background: var(--long-bg); color: var(--long-color); border: 1px solid var(--long-border); }
 .signal-action-pill.sell { background: var(--short-bg); color: var(--short-color); border: 1px solid var(--short-border); }
+.signal-action-pill.covering { background: var(--covering-bg); color: var(--covering-color); border: 1px solid var(--covering-border); }
+.signal-action-pill.unwinding { background: var(--unwinding-bg); color: var(--unwinding-color); border: 1px solid var(--unwinding-border); }
 
 .signal-card-price-row {
   display: flex;
@@ -1431,6 +1395,8 @@ body {
 }
 .signal-plain-reason.buy { border-left-color: var(--long-color); }
 .signal-plain-reason.sell { border-left-color: var(--short-color); }
+.signal-plain-reason.covering { border-left-color: var(--covering-color); }
+.signal-plain-reason.unwinding { border-left-color: var(--unwinding-color); }
 
 .signal-reason-highlight {
   font-weight: 700;

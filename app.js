@@ -165,68 +165,67 @@ function renderMetadata() {
   }
 }
 
+const SIGNAL_CATEGORIES = [
+  {
+    code: "LB",
+    listId: "lbCardsList",
+    countId: "lbCount",
+    colorClass: "buy",
+    pillLabel: "🟢 LONG BUILDUP",
+    reasonLabel: "Why:",
+    reasonText: (oiChg) => `Fresh institutional long accumulation (+${oiChg.toFixed(1)}% OI expansion) on rising price.`,
+  },
+  {
+    code: "SB",
+    listId: "sbCardsList",
+    countId: "sbCount",
+    colorClass: "sell",
+    pillLabel: "🔴 SHORT BUILDUP",
+    reasonLabel: "Why:",
+    reasonText: (oiChg) => `Institutional short buildup (+${oiChg.toFixed(1)}% OI addition) on falling price.`,
+  },
+  {
+    code: "SC",
+    listId: "scCardsList",
+    countId: "scCount",
+    colorClass: "covering",
+    pillLabel: "🔵 SHORT COVERING",
+    reasonLabel: "Why:",
+    reasonText: (oiChg) => `Shorts unwinding (${oiChg.toFixed(1)}% OI decline) as price rises.`,
+  },
+  {
+    code: "LU",
+    listId: "luCardsList",
+    countId: "luCount",
+    colorClass: "unwinding",
+    pillLabel: "🟠 LONG UNWINDING",
+    reasonLabel: "Why:",
+    reasonText: (oiChg) => `Longs exiting (${oiChg.toFixed(1)}% OI decline) as price falls.`,
+  },
+];
+
 function renderActionableSignals() {
   const stocks = state.data?.stocks || [];
   if (stocks.length === 0) return;
 
-  const buyContainer = document.getElementById("buyCardsList");
-  const sellContainer = document.getElementById("sellCardsList");
-  const biasBadge = document.getElementById("signalsMarketBias");
+  SIGNAL_CATEGORIES.forEach((cat) => {
+    const container = document.getElementById(cat.listId);
+    const countBadge = document.getElementById(cat.countId);
 
-  // Set Market Posture
-  const summary = state.data?.summary;
-  if (biasBadge && summary) {
-    if (summary.bullish_pct >= 60) {
-      biasBadge.textContent = `BULLISH BUY-ON-DIPS (${summary.bullish_pct}% Bullish)`;
-      biasBadge.className = "posture-value green";
-    } else if (summary.bullish_pct <= 40) {
-      biasBadge.textContent = `BEARISH SELL-ON-RISE (${(100 - summary.bullish_pct).toFixed(1)}% Bearish)`;
-      biasBadge.className = "posture-value red";
-    } else {
-      biasBadge.textContent = `NEUTRAL RANGEBOUND (${summary.bullish_pct}% Bullish)`;
-      biasBadge.className = "posture-value yellow";
-    }
-  }
+    const candidates = stocks
+      .filter((s) => s.category_code === cat.code)
+      .sort((a, b) => Math.abs(b.oi_chg_pct || 0) - Math.abs(a.oi_chg_pct || 0))
+      .slice(0, 5);
 
-  // 1. TOP BUY CANDIDATES FOR TOMORROW
-  let buyCandidates = stocks
-    .filter((s) => s.category_code === "LB" && (s.oi_chg_pct || 0) > 0.5 && (s.price_chg_pct || 0) > 0.0)
-    .sort((a, b) => {
-      const scoreA = (a.oi_chg_pct || 0) * 1.5 + (a.price_chg_pct || 0) * 3.0 + ((a.pcr || 1) >= 1.2 ? 15 : 0);
-      const scoreB = (b.oi_chg_pct || 0) * 1.5 + (b.price_chg_pct || 0) * 3.0 + ((b.pcr || 1) >= 1.2 ? 15 : 0);
-      return scoreB - scoreA;
-    })
-    .slice(0, 5);
+    if (countBadge) countBadge.textContent = `Top ${candidates.length}`;
+    if (!container) return;
 
-  if (buyCandidates.length === 0) {
-    buyCandidates = stocks.filter((s) => s.category_code === "LB" || s.category_code === "SC").slice(0, 5);
-  }
-
-  // 2. TOP SELL CANDIDATES FOR TOMORROW
-  let sellCandidates = stocks
-    .filter((s) => s.category_code === "SB" && (s.oi_chg_pct || 0) > 0.5 && (s.price_chg_pct || 0) < 0.0)
-    .sort((a, b) => {
-      const scoreA = (a.oi_chg_pct || 0) * 1.5 + Math.abs(a.price_chg_pct || 0) * 3.0 + ((a.pcr || 1) <= 0.8 ? 15 : 0);
-      const scoreB = (b.oi_chg_pct || 0) * 1.5 + Math.abs(b.price_chg_pct || 0) * 3.0 + ((b.pcr || 1) <= 0.8 ? 15 : 0);
-      return scoreB - scoreA;
-    })
-    .slice(0, 5);
-
-  if (sellCandidates.length === 0) {
-    sellCandidates = stocks.filter((s) => s.category_code === "SB" || s.category_code === "LU").slice(0, 5);
-  }
-
-  // Render Buy Cards
-  if (buyContainer) {
-    buyContainer.innerHTML = "";
-    buyCandidates.forEach((stock) => {
+    container.innerHTML = "";
+    candidates.forEach((stock) => {
       const ltp = stock.current_price || 0;
       const pxChg = stock.price_chg_pct || 0;
       const oiChg = stock.oi_chg_pct || 0;
-      const entryLow = round(ltp * 0.992, 1);
-      const entryHigh = round(ltp * 1.003, 1);
-      const stopLoss = stock.max_put_strike && stock.max_put_strike < ltp ? stock.max_put_strike : round(ltp * 0.978, 1);
-      const target = stock.max_call_strike && stock.max_call_strike > ltp ? stock.max_call_strike : round(ltp * 1.04, 1);
+      const isPositivePx = pxChg >= 0;
 
       const card = document.createElement("div");
       card.className = "signal-card";
@@ -237,88 +236,21 @@ function renderActionableSignals() {
             <span class="signal-symbol-badge">${stock.symbol}</span>
             <span class="signal-sector-badge">${stock.sector}</span>
           </div>
-          <span class="signal-action-pill buy">🟢 BUY ON DIP</span>
+          <span class="signal-action-pill ${cat.colorClass}">${cat.pillLabel}</span>
         </div>
 
         <div class="signal-card-price-row">
           <span class="signal-ltp">₹${ltp.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</span>
-          <span class="signal-price-chg positive">+${pxChg.toFixed(2)}% (OI: +${oiChg.toFixed(1)}%)</span>
+          <span class="signal-price-chg ${isPositivePx ? "positive" : "negative"}">${isPositivePx ? "+" : ""}${pxChg.toFixed(2)}% (OI: ${oiChg >= 0 ? "+" : ""}${oiChg.toFixed(1)}%)</span>
         </div>
 
-        <div class="signal-trade-levels">
-          <div class="trade-level-item">
-            <span class="trade-level-label">Ideal Buy Zone</span>
-            <span class="trade-level-val blue">₹${entryLow} - ${entryHigh}</span>
-          </div>
-          <div class="trade-level-item">
-            <span class="trade-level-label">Support / Stop Loss</span>
-            <span class="trade-level-val green">₹${stopLoss.toLocaleString()}</span>
-          </div>
-          <div class="trade-level-item">
-            <span class="trade-level-label">Target Ceiling</span>
-            <span class="trade-level-val green">₹${target.toLocaleString()}</span>
-          </div>
-        </div>
-
-        <div class="signal-plain-reason buy">
-          💡 <span class="signal-reason-highlight">Why Buy:</span> Fresh institutional long accumulation (+${oiChg.toFixed(1)}% OI expansion). Put support base firmly at ₹${stopLoss.toLocaleString()}.
+        <div class="signal-plain-reason ${cat.colorClass}">
+          <span class="signal-reason-highlight">${cat.reasonLabel}</span> ${cat.reasonText(oiChg)}
         </div>
       `;
-      buyContainer.appendChild(card);
+      container.appendChild(card);
     });
-  }
-
-  // Render Sell Cards
-  if (sellContainer) {
-    sellContainer.innerHTML = "";
-    sellCandidates.forEach((stock) => {
-      const ltp = stock.current_price || 0;
-      const pxChg = stock.price_chg_pct || 0;
-      const oiChg = stock.oi_chg_pct || 0;
-      const sellLow = round(ltp * 0.998, 1);
-      const sellHigh = round(ltp * 1.008, 1);
-      const stopLoss = stock.max_call_strike && stock.max_call_strike > ltp ? stock.max_call_strike : round(ltp * 1.022, 1);
-      const target = stock.max_put_strike && stock.max_put_strike < ltp ? stock.max_put_strike : round(ltp * 0.96, 1);
-
-      const card = document.createElement("div");
-      card.className = "signal-card";
-      card.onclick = () => openStockModal(stock);
-      card.innerHTML = `
-        <div class="signal-card-top">
-          <div class="signal-card-symbol-group">
-            <span class="signal-symbol-badge">${stock.symbol}</span>
-            <span class="signal-sector-badge">${stock.sector}</span>
-          </div>
-          <span class="signal-action-pill sell">🔴 SELL ON RISE</span>
-        </div>
-
-        <div class="signal-card-price-row">
-          <span class="signal-ltp">₹${ltp.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</span>
-          <span class="signal-price-chg negative">${pxChg.toFixed(2)}% (OI: +${oiChg.toFixed(1)}%)</span>
-        </div>
-
-        <div class="signal-trade-levels">
-          <div class="trade-level-item">
-            <span class="trade-level-label">Ideal Sell Zone</span>
-            <span class="trade-level-val blue">₹${sellLow} - ${sellHigh}</span>
-          </div>
-          <div class="trade-level-item">
-            <span class="trade-level-label">Resistance / Stop Loss</span>
-            <span class="trade-level-val red">₹${stopLoss.toLocaleString()}</span>
-          </div>
-          <div class="trade-level-item">
-            <span class="trade-level-label">Downside Target</span>
-            <span class="trade-level-val red">₹${target.toLocaleString()}</span>
-          </div>
-        </div>
-
-        <div class="signal-plain-reason sell">
-          ⚠️ <span class="signal-reason-highlight">Why Sell:</span> Institutional short buildup (+${oiChg.toFixed(1)}% OI addition on falling price). Resistance ceiling capped at ₹${stopLoss.toLocaleString()}.
-        </div>
-      `;
-      sellContainer.appendChild(card);
-    });
-  }
+  });
 }
 
 function renderSummaryKPIs() {

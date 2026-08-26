@@ -50,55 +50,54 @@
 
     <!-- ACTIONABLE SIGNALS FOR TOMORROW -->
     <section class="signals-section" id="signalsSection">
-      <div class="signals-header-card">
-        <div class="signals-header-left">
-          <span class="badge-headline">EOD INSTITUTIONAL DERIVATIVES SCANNER</span>
-          <h1 class="signals-main-title">Top Actionable Stock Picks for Tomorrow</h1>
-        </div>
-        <div class="signals-header-right">
-          <div class="market-posture-badge" id="signalsMarketPosture">
-            <span class="posture-label">MARKET BIAS FOR TOMORROW:</span>
-            <span class="posture-value green" id="signalsMarketBias">BULLISH BUY-ON-DIPS</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Two-Column Grid: Buys vs Sells -->
-      <div class="signals-columns-grid">
-        <!-- TOP BUYS COLUMN -->
+      <!-- Four-Column Grid: LB / SB / SC / LU -->
+      <div class="signals-columns-grid signals-columns-grid-4">
+        <!-- LONG BUILDUP -->
         <div class="signal-col signal-col-buy">
           <div class="signal-col-header buy-header">
             <div class="signal-col-title-group">
               <span class="signal-indicator-dot buy"></span>
-              <div>
-                <h2 class="signal-col-title">🟢 Top Probable BUY Stocks for Tomorrow</h2>
-                <p class="signal-col-desc">Heavy Institutional Long Buildup (Price ▲, OI ▲)</p>
-              </div>
+              <h2 class="signal-col-title">🟢 Long Buildup</h2>
             </div>
-            <span class="signal-col-count buy" id="buyPicksCount">Top 5 Strong Buys</span>
+            <span class="signal-col-count buy" id="lbCount">0</span>
           </div>
-
-          <div class="signals-card-list" id="buyCardsList">
-            <!-- Rendered dynamically via JS -->
-          </div>
+          <div class="signals-card-list" id="lbCardsList"></div>
         </div>
 
-        <!-- TOP SELLS COLUMN -->
+        <!-- SHORT BUILDUP -->
         <div class="signal-col signal-col-sell">
           <div class="signal-col-header sell-header">
             <div class="signal-col-title-group">
               <span class="signal-indicator-dot sell"></span>
-              <div>
-                <h2 class="signal-col-title">🔴 Top Probable SELL Stocks for Tomorrow</h2>
-                <p class="signal-col-desc">Heavy Institutional Short Buildup (Price ▼, OI ▲)</p>
-              </div>
+              <h2 class="signal-col-title">🔴 Short Buildup</h2>
             </div>
-            <span class="signal-col-count sell" id="sellPicksCount">Top 5 Strong Sells</span>
+            <span class="signal-col-count sell" id="sbCount">0</span>
           </div>
+          <div class="signals-card-list" id="sbCardsList"></div>
+        </div>
 
-          <div class="signals-card-list" id="sellCardsList">
-            <!-- Rendered dynamically via JS -->
+        <!-- SHORT COVERING -->
+        <div class="signal-col signal-col-covering">
+          <div class="signal-col-header covering-header">
+            <div class="signal-col-title-group">
+              <span class="signal-indicator-dot covering"></span>
+              <h2 class="signal-col-title">🔵 Short Covering</h2>
+            </div>
+            <span class="signal-col-count covering" id="scCount">0</span>
           </div>
+          <div class="signals-card-list" id="scCardsList"></div>
+        </div>
+
+        <!-- LONG UNWINDING -->
+        <div class="signal-col signal-col-unwinding">
+          <div class="signal-col-header unwinding-header">
+            <div class="signal-col-title-group">
+              <span class="signal-indicator-dot unwinding"></span>
+              <h2 class="signal-col-title">🟠 Long Unwinding</h2>
+            </div>
+            <span class="signal-col-count unwinding" id="luCount">0</span>
+          </div>
+          <div class="signals-card-list" id="luCardsList"></div>
         </div>
       </div>
     </section>
