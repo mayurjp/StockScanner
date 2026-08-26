@@ -11,9 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Chart.js & PapaParse for In-Browser CSV parsing -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   
   <link rel="stylesheet" href="styles.css?v=4.0" />
 </head>
@@ -43,14 +42,6 @@
           <span class="pulse-dot"></span>
           <span id="headerTradeDate">EOD Trade Date: Loading...</span>
         </div>
-        <button class="btn btn-secondary" id="btnUploadModal">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="17 8 12 3 7 8"></polyline>
-            <line x1="12" y1="3" x2="12" y2="15"></line>
-          </svg>
-          Upload Bhavcopy
-        </button>
       </div>
     </div>
   </header>
@@ -214,37 +205,6 @@
           </div>
         </div>
 
-      </div>
-    </div>
-  </div>
-
-  <!-- Manual Upload Modal (In-Browser Bhavcopy Analyzer) -->
-  <div class="modal-overlay hidden" id="uploadModal">
-    <div class="modal-card modal-compact">
-      <div class="modal-header">
-        <div class="modal-title-group">
-          <div>
-            <div class="modal-symbol-name">Upload NSE Bhavcopy</div>
-            <div class="modal-sector">Instant in-browser processing (No server needed)</div>
-          </div>
-        </div>
-        <button class="modal-close-btn" id="uploadCloseBtn">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="dropzone" id="dropzone">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="17 8 12 3 7 8"></polyline>
-            <line x1="12" y1="3" x2="12" y2="15"></line>
-          </svg>
-          <h4>Drag & Drop your NSE Derivatives Bhavcopy</h4>
-          <p>Supports .csv files (e.g. <code>fo27MAR2025bhav.csv</code> or uniform NSE format)</p>
-          <input type="file" id="bhavcopyFileInput" accept=".csv,.txt" style="display: none;" />
-          <button class="btn btn-primary" onclick="document.getElementById('bhavcopyFileInput').click()">Browse File</button>
-        </div>
-        <div class="upload-tip">
-          <strong>Tip:</strong> You can download the latest Bhavcopy directly from the NSE website under Market Data &gt; Daily Reports &gt; Derivatives and drop it here.
-        </div>
       </div>
     </div>
   </div>

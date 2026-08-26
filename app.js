@@ -98,14 +98,11 @@ function showNoDataFallback() {
       <tr>
         <td colspan="10" style="text-align: center; padding: 2rem;">
           <div style="font-size: 1.1rem; font-weight: 600; color: #60a5fa; margin-bottom: 0.5rem;">
-            Ready to Analyze NSE Bhavcopy
+            No Data Yet
           </div>
           <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-            Click "Upload Bhavcopy" above to drop an NSE EOD derivatives CSV, or ensure <code>python -m http.server</code> is running.
+            Data updates automatically after market close.
           </p>
-          <button class="btn btn-primary" onclick="document.getElementById('uploadModal').classList.remove('hidden')">
-            Upload Bhavcopy File
-          </button>
         </td>
       </tr>
     `;
@@ -864,243 +861,25 @@ function openStockModal(stock) {
 function setupEventListeners() {
   // Modals close
   const modalClose = document.getElementById("modalCloseBtn");
-  const uploadClose = document.getElementById("uploadCloseBtn");
-  const uploadBtn = document.getElementById("btnUploadModal");
 
   if (modalClose) {
     modalClose.onclick = () => {
       document.getElementById("stockModal")?.classList.add("hidden");
     };
   }
-  if (uploadClose) {
-    uploadClose.onclick = () => {
-      document.getElementById("uploadModal")?.classList.add("hidden");
-    };
-  }
-  if (uploadBtn) {
-    uploadBtn.onclick = () => {
-      document.getElementById("uploadModal")?.classList.remove("hidden");
-    };
-  }
 
   // Close modals when clicking outside card
   window.onclick = (e) => {
     const stockModal = document.getElementById("stockModal");
-    const uploadModal = document.getElementById("uploadModal");
     if (e.target === stockModal) stockModal.classList.add("hidden");
-    if (e.target === uploadModal) uploadModal.classList.add("hidden");
   };
 
   // Close on Escape key
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       document.getElementById("stockModal")?.classList.add("hidden");
-      document.getElementById("uploadModal")?.classList.add("hidden");
     }
   });
-
-  // In-Browser Bhavcopy File Drag-and-Drop & Parser
-  setupBhavcopyParser();
-}
-
-// ==========================================================================
-// In-Browser Bhavcopy Parser (PapaParse)
-// ==========================================================================
-
-function setupBhavcopyParser() {
-  const dropzone = document.getElementById("dropzone");
-  const fileInput = document.getElementById("bhavcopyFileInput");
-
-  if (!dropzone || !fileInput) return;
-
-  dropzone.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    dropzone.style.borderColor = "#3b82f6";
-  });
-
-  dropzone.addEventListener("dragleave", () => {
-    dropzone.style.borderColor = "";
-  });
-
-  dropzone.addEventListener("drop", (e) => {
-    e.preventDefault();
-    dropzone.style.borderColor = "";
-    if (e.dataTransfer.files.length > 0) {
-      parseBhavcopyFile(e.dataTransfer.files[0]);
-    }
-  });
-
-  fileInput.addEventListener("change", (e) => {
-    if (e.target.files.length > 0) {
-      parseBhavcopyFile(e.target.files[0]);
-    }
-  });
-}
-
-function parseBhavcopyFile(file) {
-  console.log("Parsing in browser:", file.name);
-
-  Papa.parse(file, {
-    header: true,
-    dynamicTyping: true,
-    skipEmptyLines: true,
-    complete: (results) => {
-      try {
-        processParsedBhavcopy(results.data, file.name);
-        document.getElementById("uploadModal")?.classList.add("hidden");
-      } catch (err) {
-        alert("Error parsing CSV: " + err.message);
-      }
-    },
-    error: (err) => {
-      alert("Failed to parse file: " + err.message);
-    },
-  });
-}
-
-function processParsedBhavcopy(rows, filename) {
-  const stockMap = {};
-
-  rows.forEach((r) => {
-    const inst = (r.INSTRUMENT || r.FININSTRMTP || "").toString().trim().toUpperCase();
-    const symbol = (r.SYMBOL || r.TCKRSYMB || "").toString().trim().toUpperCase();
-    const expiry = r.EXPIRY_DT || r.XPRYDT || "";
-    const strike = parseFloat(r.STRIKE_PR || r.STRKPRIC || 0);
-    const optType = (r.OPTION_TYP || r.OPTNTP || "XX").toString().trim().toUpperCase();
-    const close = parseFloat(r.CLOSE || r.CLSPRIC || r.SETTLE_PR || 0);
-    const open = parseFloat(r.OPEN || r.OPNPRIC || close);
-    const oi = parseInt(r.OPEN_INT || r.OPNINTRST || 0, 10);
-    const chgOi = parseInt(r.CHG_IN_OI || r.CHNGINOPNINTRST || 0, 10);
-    const contracts = parseInt(r.CONTRACTS || r.TTLTRADGVOL || 0, 10);
-
-    const isFuture = ["STF", "FUTSTK"].includes(inst) || (inst.startsWith("FUT") && !inst.endsWith("IDX"));
-    const isOption = ["STO", "OPTSTK"].includes(inst) || (inst.startsWith("OPT") && !inst.endsWith("IDX"));
-
-    if (!symbol || (!isFuture && !isOption) || isIndex(symbol)) return;
-
-    if (!stockMap[symbol]) {
-      stockMap[symbol] = {
-        symbol: symbol,
-        futures: [],
-        calls: {},
-        puts: {},
-        total_call_oi: 0,
-        total_put_oi: 0,
-      };
-    }
-
-    if (isFuture) {
-      stockMap[symbol].futures.push({ expiry, open, close, oi, chgOi, contracts });
-    } else if (isOption) {
-      if (optType === "CE") {
-        stockMap[symbol].calls[strike] = (stockMap[symbol].calls[strike] || 0) + oi;
-        stockMap[symbol].total_call_oi += oi;
-      } else if (optType === "PE") {
-        stockMap[symbol].puts[strike] = (stockMap[symbol].puts[strike] || 0) + oi;
-        stockMap[symbol].total_put_oi += oi;
-      }
-    }
-  });
-
-  const classified = [];
-
-  Object.values(stockMap).forEach((stk) => {
-    if (stk.futures.length === 0) return;
-
-    const near = stk.futures[0];
-    const totOi = stk.futures.reduce((acc, f) => acc + (f.oi || 0), 0);
-    const totChgOi = stk.futures.reduce((acc, f) => acc + (f.chgOi || 0), 0);
-    const totVol = stk.futures.reduce((acc, f) => acc + (f.contracts || 0), 0);
-
-    const prevOi = totOi - totChgOi;
-    const oiChgPct = prevOi > 0 ? (totChgOi / prevOi) * 100 : 0;
-    const pxChgPct = near.open > 0 ? ((near.close - near.open) / near.open) * 100 : 0;
-
-    let cat = "Long Buildup", code = "LB", color = "emerald", act = "Fresh Buying";
-    if (pxChgPct >= 0 && oiChgPct >= 0) {
-      cat = "Long Buildup"; code = "LB"; color = "emerald"; act = "Fresh Buying";
-    } else if (pxChgPct < 0 && oiChgPct >= 0) {
-      cat = "Short Buildup"; code = "SB"; color = "rose"; act = "Fresh Selling";
-    } else if (pxChgPct >= 0 && oiChgPct < 0) {
-      cat = "Short Covering"; code = "SC"; color = "sky"; act = "Shorts Exiting";
-    } else {
-      cat = "Long Unwinding"; code = "LU"; color = "amber"; act = "Longs Exiting";
-    }
-
-    const calls = stk.calls;
-    const puts = stk.puts;
-    const maxCall = Object.keys(calls).length > 0 ? parseFloat(Object.keys(calls).reduce((a, b) => (calls[a] > calls[b] ? a : b))) : 0;
-    const maxPut = Object.keys(puts).length > 0 ? parseFloat(Object.keys(puts).reduce((a, b) => (puts[a] > puts[b] ? a : b))) : 0;
-    const pcr = stk.total_call_oi > 0 ? stk.total_put_oi / stk.total_call_oi : 1.0;
-
-    const conv = Math.min(100, Math.max(50, Math.round(50 + Math.abs(oiChgPct) * 1.5 + Math.abs(pxChgPct) * 4)));
-
-    classified.push({
-      symbol: stk.symbol,
-      sector: "Equity Stock",
-      current_price: round(near.close, 2),
-      price_diff: round(near.close - near.open, 2),
-      price_chg_pct: round(pxChgPct, 2),
-      total_oi: totOi,
-      oi_chg: totChgOi,
-      oi_chg_pct: round(oiChgPct, 2),
-      volume_contracts: totVol,
-      category: cat,
-      category_code: code,
-      category_color: color,
-      action_tag: act,
-      conviction_score: conv,
-      max_call_strike: maxCall,
-      max_put_strike: maxPut,
-      pcr: round(pcr, 2),
-      next_day_plan: `${cat} detected with ${oiChgPct > 0 ? "+" : ""}${oiChgPct.toFixed(1)}% OI change. Major Support at ₹${maxPut || "N/A"}, Resistance at ₹${maxCall || "N/A"}.`,
-      futures_breakdown: stk.futures.map((f) => ({
-        expiry: f.expiry,
-        close: f.close,
-        oi: f.oi,
-        chg_oi: f.chgOi,
-        contracts: f.contracts,
-      })),
-      options_chain: [],
-    });
-  });
-
-  classified.sort((a, b) => Math.abs(b.oi_chg_pct || 0) - Math.abs(a.oi_chg_pct || 0));
-
-  const lb = classified.filter((s) => s.category_code === "LB").length;
-  const sb = classified.filter((s) => s.category_code === "SB").length;
-  const sc = classified.filter((s) => s.category_code === "SC").length;
-  const lu = classified.filter((s) => s.category_code === "LU").length;
-  const tot = classified.length;
-
-  const bullPct = tot > 0 ? round(((lb * 1.5 + sc * 0.8) / ((lb + sb) * 1.5 + (sc + lu) * 0.8 || 1)) * 100, 1) : 50;
-
-  state.data = {
-    metadata: {
-      trade_date: filename.replace(/[^0-9a-zA-Z]/g, " "),
-      total_stocks_scanned: tot,
-    },
-    summary: {
-      market_bias: bullPct >= 60 ? "Bullish Dominance" : bullPct <= 40 ? "Bearish Dominance" : "Neutral Rotation",
-      bullish_pct: bullPct,
-      counts: {
-        long_buildup: lb,
-        short_buildup: sb,
-        short_covering: sc,
-        long_unwinding: lu,
-        total: tot,
-      },
-      top_picks: {
-        top_longs: classified.filter((s) => s.category_code === "LB").slice(0, 5).map((s) => s.symbol),
-        top_shorts: classified.filter((s) => s.category_code === "SB").slice(0, 5).map((s) => s.symbol),
-        top_short_covering: classified.filter((s) => s.category_code === "SC").slice(0, 5).map((s) => s.symbol),
-      },
-    },
-    sectors: [],
-    stocks: classified,
-  };
-
-  initDashboard();
 }
 
 // ==========================================================================
