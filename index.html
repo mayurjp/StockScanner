@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NSE OI Pulse | Tomorrow's Buy & Sell Stock Signals</title>
+  <meta name="description" content="Actionable End of Day NSE Open Interest stock signals identifying top probable buys and sells for tomorrow." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js & PapaParse for In-Browser CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  
+  <link rel="stylesheet" href="styles.css?v=4.0" />
+</head>
+<body class="dark-theme">
+
+  <!-- Top Navigation / Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-section">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+            <polyline points="16 7 22 7 22 13"></polyline>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">
+            <span class="brand-highlight">NSE OI</span> PULSE
+            <span class="badge-pro">TOMORROW SIGNALS</span>
+          </div>
+          <p class="brand-subtitle">AI-filtered next-day Buy & Sell picks backed by Open Interest</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="eod-timestamp" id="eodDateBadge">
+          <span class="pulse-dot"></span>
+          <span id="headerTradeDate">EOD Trade Date: Loading...</span>
+        </div>
+        <button class="btn btn-secondary" id="btnUploadModal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          Upload Bhavcopy
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-main">
+
+    <!-- ACTIONABLE SIGNALS FOR TOMORROW -->
+    <section class="signals-section" id="signalsSection">
+      <div class="signals-header-card">
+        <div class="signals-header-left">
+          <span class="badge-headline">EOD INSTITUTIONAL DERIVATIVES SCANNER</span>
+          <h1 class="signals-main-title">Top Actionable Stock Picks for Tomorrow</h1>
+          <p class="signals-main-subtitle">
+            Purely backed by Institutional Open Interest (OI) accumulation, Options Support/Resistance zones, and Price Momentum.
+          </p>
+        </div>
+        <div class="signals-header-right">
+          <div class="market-posture-badge" id="signalsMarketPosture">
+            <span class="posture-label">MARKET BIAS FOR TOMORROW:</span>
+            <span class="posture-value green" id="signalsMarketBias">BULLISH BUY-ON-DIPS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two-Column Grid: Buys vs Sells -->
+      <div class="signals-columns-grid">
+        <!-- TOP BUYS COLUMN -->
+        <div class="signal-col signal-col-buy">
+          <div class="signal-col-header buy-header">
+            <div class="signal-col-title-group">
+              <span class="signal-indicator-dot buy"></span>
+              <div>
+                <h2 class="signal-col-title">🟢 Top Probable BUY Stocks for Tomorrow</h2>
+                <p class="signal-col-desc">Heavy Institutional Long Buildup (Price ▲, OI ▲)</p>
+              </div>
+            </div>
+            <span class="signal-col-count buy" id="buyPicksCount">Top 5 Strong Buys</span>
+          </div>
+
+          <div class="signals-card-list" id="buyCardsList">
+            <!-- Rendered dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- TOP SELLS COLUMN -->
+        <div class="signal-col signal-col-sell">
+          <div class="signal-col-header sell-header">
+            <div class="signal-col-title-group">
+              <span class="signal-indicator-dot sell"></span>
+              <div>
+                <h2 class="signal-col-title">🔴 Top Probable SELL Stocks for Tomorrow</h2>
+                <p class="signal-col-desc">Heavy Institutional Short Buildup (Price ▼, OI ▲)</p>
+              </div>
+            </div>
+            <span class="signal-col-count sell" id="sellPicksCount">Top 5 Strong Sells</span>
+          </div>
+
+          <div class="signals-card-list" id="sellCardsList">
+            <!-- Rendered dynamically via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Stock Deep Dive Modal -->
+  <div class="modal-overlay hidden" id="stockModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-symbol-badge" id="modalSymbolBadge">TATAMOTORS</div>
+          <div>
+            <div class="modal-symbol-name" id="modalSymbol">TATAMOTORS</div>
+            <div class="modal-sector" id="modalSector">Automobile & Auto Parts</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Stock Quick Stats -->
+        <div class="modal-stats-grid">
+          <div class="stat-box">
+            <span class="stat-lbl">Last Traded Price</span>
+            <span class="stat-val" id="modalPrice">₹985.40</span>
+            <span class="stat-sub positive" id="modalPriceChg">+2.43% (+₹23.40)</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-lbl">Total Futures OI</span>
+            <span class="stat-val" id="modalTotalOI">52.8 M</span>
+            <span class="stat-sub positive" id="modalOIChg">+19.56%</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-lbl">Derivatives Buildup</span>
+            <div class="modal-badge-container">
+              <span class="pill-badge emerald" id="modalCategoryBadge">Long Buildup</span>
+            </div>
+            <span class="stat-sub" id="modalActionTag">Fresh Buying Activity</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-lbl">Put-Call Ratio (PCR)</span>
+            <span class="stat-val" id="modalPCR">1.34</span>
+            <span class="stat-sub" id="modalPCRSentiment">Bullish Put Writing</span>
+          </div>
+        </div>
+
+        <!-- Next Day Actionable Trading Plan -->
+        <div class="trade-plan-card">
+          <div class="plan-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="12 8 8 12 12 16 12 8"></polygon>
+            </svg>
+            <span>NEXT-DAY TRADING PLAYBOOK</span>
+          </div>
+          <p class="plan-body" id="modalNextDayPlan">
+            Massive institutional buying (+19.6% OI expansion). Put writers firmly positioned at 960 strike creating strong base. Target next psychological breakout at 1000.00.
+          </p>
+          <div class="key-levels-row">
+            <div class="key-level">
+              <span class="level-label">Major Support (Max Put OI):</span>
+              <span class="level-val green-text" id="modalSupport">₹960.00</span>
+            </div>
+            <div class="key-level">
+              <span class="level-label">Major Resistance (Max Call OI):</span>
+              <span class="level-val red-text" id="modalResistance">₹1000.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Multi-Contract & Options Strike Charts -->
+        <div class="modal-charts-grid">
+          <!-- Futures Expiry Breakdown -->
+          <div class="sub-chart-box">
+            <h4 class="sub-chart-title">Futures Expiry Open Interest Distribution</h4>
+            <div class="futures-table-container">
+              <table class="futures-table">
+                <thead>
+                  <tr>
+                    <th>Expiry Month</th>
+                    <th class="text-right">Price (₹)</th>
+                    <th class="text-right">Open Interest</th>
+                    <th class="text-right">OI Change</th>
+                  </tr>
+                </thead>
+                <tbody id="modalFuturesTable">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Options Strike Chart -->
+          <div class="sub-chart-box">
+            <h4 class="sub-chart-title">Options Strike OI (Calls vs Puts)</h4>
+            <div class="sub-chart-wrapper">
+              <canvas id="optionsStrikeChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Manual Upload Modal (In-Browser Bhavcopy Analyzer) -->
+  <div class="modal-overlay hidden" id="uploadModal">
+    <div class="modal-card modal-compact">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div>
+            <div class="modal-symbol-name">Upload NSE Bhavcopy</div>
+            <div class="modal-sector">Instant in-browser processing (No server needed)</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="uploadCloseBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="dropzone" id="dropzone">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <h4>Drag & Drop your NSE Derivatives Bhavcopy</h4>
+          <p>Supports .csv files (e.g. <code>fo27MAR2025bhav.csv</code> or uniform NSE format)</p>
+          <input type="file" id="bhavcopyFileInput" accept=".csv,.txt" style="display: none;" />
+          <button class="btn btn-primary" onclick="document.getElementById('bhavcopyFileInput').click()">Browse File</button>
+        </div>
+        <div class="upload-tip">
+          <strong>Tip:</strong> You can download the latest Bhavcopy directly from the NSE website under Market Data &gt; Daily Reports &gt; Derivatives and drop it here.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <span>NSE OI Pulse © 2025</span> • <span>Next-Day Derivatives Trading Edge</span>
+      </div>
+      <div class="footer-right">
+        <span>🟢 <strong>Long Buildup</strong> (Institutional Buyers) | 🔴 <strong>Short Buildup</strong> (Institutional Sellers)</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js?v=4.0"></script>
+</body>
+</html>

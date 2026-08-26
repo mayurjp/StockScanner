@@ -1,0 +1,3 @@
+# Optional dependencies (pure standard library is supported as fallback)
+requests>=2.31.0
+pandas>=2.0.0

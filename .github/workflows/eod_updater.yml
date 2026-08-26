@@ -1,0 +1,58 @@
+name: Daily EOD NSE Derivatives Scanner & Static Site Updater
+
+on:
+  schedule:
+    # Trigger 1: 18:15 IST (12:45 UTC) Monday to Friday (Primary run after market close)
+    - cron: '45 12 * * 1-5'
+    # Trigger 2: 19:15 IST (13:45 UTC) Monday to Friday (Backup run in case NSE upload is delayed)
+    - cron: '45 13 * * 1-5'
+  workflow_dispatch: # Allows manual 1-click trigger anytime from GitHub Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eod-updater
+  cancel-in-progress: true
+
+jobs:
+  update-eod-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Fetch & Analyze NSE EOD Bhavcopy
+        run: |
+          python analyzer.py --fetch
+
+      - name: Commit and Push Updated Data
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # Stage the generated data
+          git add data/latest.json data/downloads/
+          
+          # Commit only if data changed
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(data): auto-update EOD stock signals for $(date +'%Y-%m-%d')"
+            git pull --rebase origin main || true
+            git push origin main
+            echo "Successfully committed and pushed fresh EOD data."
+          else
+            echo "No data changes detected. Skipping commit."
+          fi
