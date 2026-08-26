@@ -1,28 +1,28 @@
 {
   "metadata": {
     "trade_date": "2026-08-25",
-    "generated_at": "2026-08-26 12:39:30 IST",
-    "total_stocks_scanned": 214,
+    "generated_at": "2026-08-26 13:38:50 IST",
+    "total_stocks_scanned": 208,
     "source": "NSE Derivatives Bhavcopy"
   },
   "summary": {
     "market_bias": "Bullish Dominance (Heavy Long Buildup)",
-    "bullish_pct": 67.3,
+    "bullish_pct": 66.3,
     "bias_color": "emerald",
     "counts": {
-      "long_buildup": 101,
+      "long_buildup": 96,
       "short_buildup": 44,
-      "short_covering": 40,
+      "short_covering": 39,
       "long_unwinding": 29,
-      "total": 214
+      "total": 208
     },
     "top_picks": {
       "top_longs": [
-        "NIFTYFPI",
         "VOLTAS",
         "HINDPETRO",
         "LT",
-        "NAUKRI"
+        "NAUKRI",
+        "COCHINSHIP"
       ],
       "top_shorts": [
         "HEROMOTOCO",
@@ -32,32 +32,15 @@
         "CAMS"
       ],
       "top_short_covering": [
-        "FINNIFTY",
         "ANGELONE",
         "SHREECEM",
         "IREDA",
-        "INDIANB"
+        "INDIANB",
+        "NHPC"
       ]
     }
   },
   "sectors": [
-    {
-      "sector": "Index",
-      "total_stocks": 4,
-      "long_buildup": 3,
-      "short_buildup": 0,
-      "short_covering": 1,
-      "long_unwinding": 0,
-      "net_oi_flow": 2257355,
-      "avg_price_chg": 0.0,
-      "symbols": [
-        "BANKNIFTY",
-        "NIFTY",
-        "FINNIFTY",
-        "MIDCPNIFTY"
-      ],
-      "bullish_ratio": 100.0
-    },
     {
       "sector": "Telecom & Media",
       "total_stocks": 3,
@@ -235,12 +218,12 @@
     },
     {
       "sector": "Diversified / Others",
-      "total_stocks": 80,
-      "long_buildup": 33,
+      "total_stocks": 78,
+      "long_buildup": 31,
       "short_buildup": 12,
       "short_covering": 18,
       "long_unwinding": 17,
-      "net_oi_flow": -47555275,
+      "net_oi_flow": -47582475,
       "avg_price_chg": 0.0,
       "symbols": [
         "ABCAPITAL",
@@ -295,7 +278,6 @@
         "VMM",
         "BLUESTARCO",
         "HDFCAMC",
-        "NIFTYNXT50",
         "360ONE",
         "LICI",
         "POLICYBZR",
@@ -320,11 +302,10 @@
         "HYUNDAI",
         "IRFC",
         "NAUKRI",
-        "NIFTYFPI",
         "SBICARD",
         "WAAREEENER"
       ],
-      "bullish_ratio": 63.7
+      "bullish_ratio": 62.8
     },
     {
       "sector": "Banking & Financials",
@@ -439,202 +420,6 @@
     }
   ],
   "stocks": [
-    {
-      "symbol": "NIFTYFPI",
-      "sector": "Diversified / Others",
-      "current_price": 1578.0,
-      "open_price": 0.0,
-      "high_price": 0.0,
-      "low_price": 0.0,
-      "price_diff": 0.0,
-      "price_chg_pct": 0.0,
-      "total_oi": 31900,
-      "oi_chg": 26400,
-      "oi_chg_pct": 480.0,
-      "volume_contracts": 24,
-      "turnover_lakh": 418.95,
-      "category": "Long Buildup",
-      "category_code": "LB",
-      "category_color": "emerald",
-      "action_tag": "Fresh Buying",
-      "sentiment": "Bullish",
-      "buyer_bias": "Buyers Aggressive",
-      "conviction_score": 100,
-      "max_call_strike": 1650.0,
-      "max_call_oi": 168300,
-      "max_put_strike": 1590.0,
-      "max_put_oi": 2200,
-      "pcr": 0.02,
-      "next_day_plan": "Aggressive institutional buying (+480.0% OI). Look for buy-on-dips near support strike 1590.0. Target next resistance at 1650.0.",
-      "futures_breakdown": [
-        {
-          "expiry": "2026-08-25",
-          "close": 1578.0,
-          "oi": 5500,
-          "chg_oi": 0,
-          "contracts": 0
-        },
-        {
-          "expiry": "2026-09-29",
-          "close": 1627.85,
-          "oi": 26400,
-          "chg_oi": 26400,
-          "contracts": 24
-        },
-        {
-          "expiry": "2026-10-27",
-          "close": 1610.45,
-          "oi": 0,
-          "chg_oi": 0,
-          "contracts": 0
-        }
-      ],
-      "options_chain": [
-        {
-          "strike": 1560.0,
-          "call_oi": 0,
-          "put_oi": 0
-        },
-        {
-          "strike": 1565.0,
-          "call_oi": 0,
-          "put_oi": 0
-        },
-        {
-          "strike": 1570.0,
-          "call_oi": 0,
-          "put_oi": 0
-        },
-        {
-          "strike": 1575.0,
-          "call_oi": 0,
-          "put_oi": 0
-        },
-        {
-          "strike": 1580.0,
-          "call_oi": 0,
-          "put_oi": 0
-        },
-        {
-          "strike": 1585.0,
-          "call_oi": 1100,
-          "put_oi": 0
-        },
-        {
-          "strike": 1590.0,
-          "call_oi": 0,
-          "put_oi": 2200
-        },
-        {
-          "strike": 1595.0,
-          "call_oi": 1100,
-          "put_oi": 1100
-        },
-        {
-          "strike": 1600.0,
-          "call_oi": 8800,
-          "put_oi": 0
-        }
-      ]
-    },
-    {
-      "symbol": "FINNIFTY",
-      "sector": "Index",
-      "current_price": 26219.3,
-      "open_price": 26046.4,
-      "high_price": 26260.9,
-      "low_price": 26019.9,
-      "price_diff": 80.2,
-      "price_chg_pct": 0.31,
-      "total_oi": 34260,
-      "oi_chg": -9840,
-      "oi_chg_pct": -22.31,
-      "volume_contracts": 1293,
-      "turnover_lakh": 20359.25,
-      "category": "Short Covering",
-      "category_code": "SC",
-      "category_color": "sky",
-      "action_tag": "Shorts Exiting",
-      "sentiment": "Bullish Bounce",
-      "buyer_bias": "Short Squeeze / Relief",
-      "conviction_score": 78,
-      "max_call_strike": 26250.0,
-      "max_call_oi": 252960,
-      "max_put_strike": 26200.0,
-      "max_put_oi": 283920,
-      "pcr": 0.94,
-      "next_day_plan": "Shorts rushing to exit (-22.3% OI drop). Watch if fresh buyers enter at open for follow-through momentum.",
-      "futures_breakdown": [
-        {
-          "expiry": "2026-08-25",
-          "close": 26219.3,
-          "oi": 13020,
-          "chg_oi": -24420,
-          "contracts": 788
-        },
-        {
-          "expiry": "2026-09-29",
-          "close": 26460.6,
-          "oi": 21240,
-          "chg_oi": 14580,
-          "contracts": 505
-        },
-        {
-          "expiry": "2026-10-27",
-          "close": 26421.0,
-          "oi": 0,
-          "chg_oi": 0,
-          "contracts": 0
-        }
-      ],
-      "options_chain": [
-        {
-          "strike": 26000.0,
-          "call_oi": 31740,
-          "put_oi": 83340
-        },
-        {
-          "strike": 26050.0,
-          "call_oi": 44640,
-          "put_oi": 96660
-        },
-        {
-          "strike": 26100.0,
-          "call_oi": 81540,
-          "put_oi": 147060
-        },
-        {
-          "strike": 26150.0,
-          "call_oi": 59100,
-          "put_oi": 151440
-        },
-        {
-          "strike": 26200.0,
-          "call_oi": 189960,
-          "put_oi": 283920
-        },
-        {
-          "strike": 26250.0,
-          "call_oi": 252960,
-          "put_oi": 90480
-        },
-        {
-          "strike": 26300.0,
-          "call_oi": 142980,
-          "put_oi": 55620
-        },
-        {
-          "strike": 26350.0,
-          "call_oi": 100260,
-          "put_oi": 16260
-        },
-        {
-          "strike": 26400.0,
-          "call_oi": 115560,
-          "put_oi": 34380
-        }
-      ]
-    },
     {
       "symbol": "VOLTAS",
       "sector": "Capital Goods & Infra",
@@ -1224,104 +1009,6 @@
       ]
     },
     {
-      "symbol": "BANKNIFTY",
-      "sector": "Index",
-      "current_price": 57503.4,
-      "open_price": 57300.0,
-      "high_price": 57650.0,
-      "low_price": 57259.4,
-      "price_diff": 66.4,
-      "price_chg_pct": 0.12,
-      "total_oi": 2643660,
-      "oi_chg": 283860,
-      "oi_chg_pct": 12.03,
-      "volume_contracts": 55698,
-      "turnover_lakh": 963497.03,
-      "category": "Long Buildup",
-      "category_code": "LB",
-      "category_color": "emerald",
-      "action_tag": "Fresh Buying",
-      "sentiment": "Bullish",
-      "buyer_bias": "Buyers Aggressive",
-      "conviction_score": 68,
-      "max_call_strike": 57500.0,
-      "max_call_oi": 4587030,
-      "max_put_strike": 57500.0,
-      "max_put_oi": 4220610,
-      "pcr": 0.96,
-      "next_day_plan": "Aggressive institutional buying (+12.0% OI). Look for buy-on-dips near support strike 57500.0. Target next resistance at 57500.0.",
-      "futures_breakdown": [
-        {
-          "expiry": "2026-08-25",
-          "close": 57503.4,
-          "oi": 550230,
-          "chg_oi": -289680,
-          "contracts": 24072
-        },
-        {
-          "expiry": "2026-09-29",
-          "close": 57842.2,
-          "oi": 1986030,
-          "chg_oi": 552210,
-          "contracts": 30069
-        },
-        {
-          "expiry": "2026-10-27",
-          "close": 58178.6,
-          "oi": 107400,
-          "chg_oi": 21330,
-          "contracts": 1557
-        }
-      ],
-      "options_chain": [
-        {
-          "strike": 57100.0,
-          "call_oi": 127020,
-          "put_oi": 643860
-        },
-        {
-          "strike": 57200.0,
-          "call_oi": 224670,
-          "put_oi": 978930
-        },
-        {
-          "strike": 57300.0,
-          "call_oi": 424800,
-          "put_oi": 1839480
-        },
-        {
-          "strike": 57400.0,
-          "call_oi": 705720,
-          "put_oi": 2095800
-        },
-        {
-          "strike": 57500.0,
-          "call_oi": 4587030,
-          "put_oi": 4220610
-        },
-        {
-          "strike": 57600.0,
-          "call_oi": 2525310,
-          "put_oi": 356760
-        },
-        {
-          "strike": 57700.0,
-          "call_oi": 1709580,
-          "put_oi": 417150
-        },
-        {
-          "strike": 57800.0,
-          "call_oi": 1083450,
-          "put_oi": 219870
-        },
-        {
-          "strike": 57900.0,
-          "call_oi": 639750,
-          "put_oi": 158880
-        }
-      ]
-    },
-    {
       "symbol": "BANDHANBNK",
       "sector": "Banking & Financials",
       "current_price": 172.94,
@@ -1598,104 +1285,6 @@
           "strike": 89.0,
           "call_oi": 4660075,
           "put_oi": 6211625
-        }
-      ]
-    },
-    {
-      "symbol": "NIFTY",
-      "sector": "Index",
-      "current_price": 24288.1,
-      "open_price": 24176.0,
-      "high_price": 24347.0,
-      "low_price": 24132.9,
-      "price_diff": 78.5,
-      "price_chg_pct": 0.32,
-      "total_oi": 19056960,
-      "oi_chg": 1855295,
-      "oi_chg_pct": 10.79,
-      "volume_contracts": 165159,
-      "turnover_lakh": 2608570.44,
-      "category": "Long Buildup",
-      "category_code": "LB",
-      "category_color": "emerald",
-      "action_tag": "Fresh Buying",
-      "sentiment": "Bullish",
-      "buyer_bias": "Buyers Aggressive",
-      "conviction_score": 67,
-      "max_call_strike": 25000.0,
-      "max_call_oi": 25274995,
-      "max_put_strike": 24000.0,
-      "max_put_oi": 26874690,
-      "pcr": 1.13,
-      "next_day_plan": "Aggressive institutional buying (+10.8% OI). Look for buy-on-dips near support strike 24000.0. Target next resistance at 25000.0.",
-      "futures_breakdown": [
-        {
-          "expiry": "2026-08-25",
-          "close": 24288.1,
-          "oi": 4309630,
-          "chg_oi": -1883635,
-          "contracts": 72566
-        },
-        {
-          "expiry": "2026-09-29",
-          "close": 24471.7,
-          "oi": 13609895,
-          "chg_oi": 3459950,
-          "contracts": 85464
-        },
-        {
-          "expiry": "2026-10-27",
-          "close": 24590.4,
-          "oi": 1137435,
-          "chg_oi": 278980,
-          "contracts": 7129
-        }
-      ],
-      "options_chain": [
-        {
-          "strike": 24100.0,
-          "call_oi": 3966560,
-          "put_oi": 14525030
-        },
-        {
-          "strike": 24150.0,
-          "call_oi": 4644510,
-          "put_oi": 14052350
-        },
-        {
-          "strike": 24200.0,
-          "call_oi": 13464490,
-          "put_oi": 26329940
-        },
-        {
-          "strike": 24250.0,
-          "call_oi": 7636330,
-          "put_oi": 16034005
-        },
-        {
-          "strike": 24300.0,
-          "call_oi": 16204825,
-          "put_oi": 25888850
-        },
-        {
-          "strike": 24350.0,
-          "call_oi": 17554615,
-          "put_oi": 4558645
-        },
-        {
-          "strike": 24400.0,
-          "call_oi": 14733290,
-          "put_oi": 7511270
-        },
-        {
-          "strike": 24450.0,
-          "call_oi": 5821335,
-          "put_oi": 747305
-        },
-        {
-          "strike": 24500.0,
-          "call_oi": 20435610,
-          "put_oi": 8143980
         }
       ]
     },
@@ -2300,7 +1889,7 @@
       "oi_chg": -39025,
       "oi_chg_pct": -9.66,
       "volume_contracts": 6885,
-      "turnover_lakh": 41675.08,
+      "turnover_lakh": 41675.09,
       "category": "Short Covering",
       "category_code": "SC",
       "category_color": "sky",
@@ -3852,104 +3441,6 @@
           "strike": 3400.0,
           "call_oi": 370975,
           "put_oi": 24475
-        }
-      ]
-    },
-    {
-      "symbol": "MIDCPNIFTY",
-      "sector": "Index",
-      "current_price": 14990.35,
-      "open_price": 14888.0,
-      "high_price": 15008.0,
-      "low_price": 14848.9,
-      "price_diff": 98.25,
-      "price_chg_pct": 0.66,
-      "total_oi": 2028360,
-      "oi_chg": 128040,
-      "oi_chg_pct": 6.74,
-      "volume_contracts": 9073,
-      "turnover_lakh": 162600.98,
-      "category": "Long Buildup",
-      "category_code": "LB",
-      "category_color": "emerald",
-      "action_tag": "Fresh Buying",
-      "sentiment": "Bullish",
-      "buyer_bias": "Buyers Aggressive",
-      "conviction_score": 63,
-      "max_call_strike": 15000.0,
-      "max_call_oi": 1705320,
-      "max_put_strike": 15000.0,
-      "max_put_oi": 1252320,
-      "pcr": 1.14,
-      "next_day_plan": "Aggressive institutional buying (+6.7% OI). Look for buy-on-dips near support strike 15000.0. Target next resistance at 15000.0.",
-      "futures_breakdown": [
-        {
-          "expiry": "2026-08-25",
-          "close": 14990.35,
-          "oi": 325320,
-          "chg_oi": -178680,
-          "contracts": 4123
-        },
-        {
-          "expiry": "2026-09-29",
-          "close": 15035.6,
-          "oi": 1674120,
-          "chg_oi": 300120,
-          "contracts": 4820
-        },
-        {
-          "expiry": "2026-10-27",
-          "close": 15095.6,
-          "oi": 28920,
-          "chg_oi": 6600,
-          "contracts": 130
-        }
-      ],
-      "options_chain": [
-        {
-          "strike": 14900.0,
-          "call_oi": 772200,
-          "put_oi": 1202280
-        },
-        {
-          "strike": 14925.0,
-          "call_oi": 136920,
-          "put_oi": 278280
-        },
-        {
-          "strike": 14950.0,
-          "call_oi": 334560,
-          "put_oi": 556680
-        },
-        {
-          "strike": 14975.0,
-          "call_oi": 499320,
-          "put_oi": 500160
-        },
-        {
-          "strike": 15000.0,
-          "call_oi": 1705320,
-          "put_oi": 1252320
-        },
-        {
-          "strike": 15025.0,
-          "call_oi": 320400,
-          "put_oi": 60000
-        },
-        {
-          "strike": 15050.0,
-          "call_oi": 540840,
-          "put_oi": 66000
-        },
-        {
-          "strike": 15075.0,
-          "call_oi": 194160,
-          "put_oi": 28080
-        },
-        {
-          "strike": 15100.0,
-          "call_oi": 758760,
-          "put_oi": 113040
         }
       ]
     },
@@ -5910,104 +5401,6 @@
           "strike": 480.0,
           "call_oi": 1458600,
           "put_oi": 207825
-        }
-      ]
-    },
-    {
-      "symbol": "NIFTYNXT50",
-      "sector": "Diversified / Others",
-      "current_price": 74491.2,
-      "open_price": 73722.4,
-      "high_price": 74684.8,
-      "low_price": 73550.0,
-      "price_diff": 768.8,
-      "price_chg_pct": 1.04,
-      "total_oi": 18525,
-      "oi_chg": 800,
-      "oi_chg_pct": 4.51,
-      "volume_contracts": 840,
-      "turnover_lakh": 15524.46,
-      "category": "Long Buildup",
-      "category_code": "LB",
-      "category_color": "emerald",
-      "action_tag": "Fresh Buying",
-      "sentiment": "Bullish",
-      "buyer_bias": "Buyers Aggressive",
-      "conviction_score": 61,
-      "max_call_strike": 77800.0,
-      "max_call_oi": 4225,
-      "max_put_strike": 73000.0,
-      "max_put_oi": 5225,
-      "pcr": 1.7,
-      "next_day_plan": "Aggressive institutional buying (+4.5% OI). Look for buy-on-dips near support strike 73000.0. Target next resistance at 77800.0.",
-      "futures_breakdown": [
-        {
-          "expiry": "2026-08-25",
-          "close": 74491.2,
-          "oi": 2050,
-          "chg_oi": -6850,
-          "contracts": 420
-        },
-        {
-          "expiry": "2026-09-29",
-          "close": 74399.8,
-          "oi": 16425,
-          "chg_oi": 7600,
-          "contracts": 417
-        },
-        {
-          "expiry": "2026-10-27",
-          "close": 74569.4,
-          "oi": 50,
-          "chg_oi": 50,
-          "contracts": 3
-        }
-      ],
-      "options_chain": [
-        {
-          "strike": 74100.0,
-          "call_oi": 50,
-          "put_oi": 0
-        },
-        {
-          "strike": 74200.0,
-          "call_oi": 0,
-          "put_oi": 0
-        },
-        {
-          "strike": 74300.0,
-          "call_oi": 0,
-          "put_oi": 0
-        },
-        {
-          "strike": 74400.0,
-          "call_oi": 75,
-          "put_oi": 25
-        },
-        {
-          "strike": 74500.0,
-          "call_oi": 175,
-          "put_oi": 0
-        },
-        {
-          "strike": 74600.0,
-          "call_oi": 2225,
-          "put_oi": 0
-        },
-        {
-          "strike": 74700.0,
-          "call_oi": 600,
-          "put_oi": 0
-        },
-        {
-          "strike": 74800.0,
-          "call_oi": 75,
-          "put_oi": 0
-        },
-        {
-          "strike": 74900.0,
-          "call_oi": 25,
-          "put_oi": 0
         }
       ]
     },
